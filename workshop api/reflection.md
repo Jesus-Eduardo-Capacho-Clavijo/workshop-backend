@@ -1,10 +1,10 @@
-# Workshop Reflection
+# Reflexión del Taller
 
-## 1. What did you have to clarify or fix in the generated specs?
-When generating the specifications, I had to ensure that the AI explicitly documented all the state transitions for a Sale (e.g., ACTIVE -> FROZEN -> ACTIVE). Initially, AI tends to overlook the "unhappy paths" such as what happens when a customer's credit is REJECTED, or the edge case where someone attempts a full return on an already partially returned sale. I had to explicitly fix the design spec to mandate a `GlobalExceptionHandler` to translate these business validation failures into the requested 409, 422, and 503 HTTP status codes so the API contract was perfectly clear.
+## 1. ¿Qué tuviste que aclarar o corregir en las especificaciones generadas?
+Al generar las especificaciones, tuve que asegurarme de que la IA documentara explícitamente todas las transiciones de estado de una Venta (p.ej., ACTIVA → CONGELADA → ACTIVA). Inicialmente, la IA tiende a pasar por alto los "caminos no deseados", como lo que ocurre cuando el crédito de un cliente es RECHAZADO, o el caso límite en el que alguien intenta una devolución total de una venta que ya había sido devuelta parcialmente. Tuve que corregir explícitamente el diseño para exigir un `GlobalExceptionHandler` que tradujera estas fallas de validación de negocio a los códigos de estado HTTP 409, 422 y 503 solicitados, de modo que el contrato de la API quedara perfectamente claro.
 
-## 2. How did the quality of your prompt affect the generated code?
-The precision of the prompt directly dictated the quality of the service layer. By explicitly mentioning that stock validation must occur *both* when adding an item and at checkout time, the generated code included robust concurrency prevention. Specifying the exact fields required for a Receipt and mandating WireMock for external dependencies ensured that the final generated tests and DTOs were correctly structured from the start, minimizing refactoring.
+## 2. ¿Cómo afectó la calidad de tu prompt al código generado?
+La precisión del prompt determinó directamente la calidad de la capa de servicio. Al mencionar explícitamente que la validación de stock debe realizarse *tanto* al agregar un artículo como al momento del checkout, el código generado incluyó una robusta prevención de concurrencia. Especificar los campos exactos requeridos para un Recibo y exigir WireMock para dependencias externas aseguró que las pruebas y DTOs finales estuvieran estructurados correctamente desde el principio, minimizando la refactorización.
 
-## 3. What would you do differently next time?
-Next time, I would be even more explicit about the exact JSON payload structures expected for requests and responses in the prompt, so the AI defines the DTOs with their `@NotBlank` and `@NotNull` validation annotations perfectly on the first try. I would also explicitly define the scheduling frequency for the background job that cleans up expired frozen sales, rather than just stating that they expire after 2 hours.
+## 3. ¿Qué harías diferente la próxima vez?
+La próxima vez, sería aún más explícito sobre las estructuras exactas de payload JSON esperadas para solicitudes y respuestas en el prompt, de modo que la IA defina los DTOs con sus anotaciones de validación `@NotBlank` y `@NotNull` perfectamente en el primer intento. También definiría explícitamente la frecuencia de ejecución del trabajo en segundo plano que limpia ventas congeladas expiradas, en lugar de simplemente indicar que expiran después de 2 horas.

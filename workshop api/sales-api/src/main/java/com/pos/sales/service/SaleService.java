@@ -280,10 +280,14 @@ public class SaleService {
     private void recalculateTotals(Sale sale) {
         BigDecimal subtotal = sale.getItems().stream()
                 .map(SaleItem::getLineTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, java.math.RoundingMode.HALF_UP);
         sale.setSubtotal(subtotal);
-        sale.setTax(subtotal.multiply(taxRate));
-        sale.setTotal(sale.getSubtotal().add(sale.getTax()).subtract(sale.getDiscount()));
+        BigDecimal tax = subtotal.multiply(taxRate).setScale(2, java.math.RoundingMode.HALF_UP);
+        sale.setTax(tax);
+        BigDecimal total = subtotal.add(tax).subtract(sale.getDiscount()).setScale(2, java.math.RoundingMode.HALF_UP);
+        sale.setTotal(total);
+
     }
 
     private Sale getSaleById(Long saleId) {
