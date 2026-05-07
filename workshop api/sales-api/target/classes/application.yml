@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:salesdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+api:
+  product:
+    url: http://localhost:8081/api/products
+  customer:
+    url: http://localhost:8082/api/customers
+
+pos:
+  tax-rate: 0.19
+  frozen-sale-expiration-minutes: 120

@@ -1,0 +1,31 @@
+Please build a REST API using Spring Boot 3.x and Java 17 for a Supermarket POS system.
+
+External Dependencies:
+- Product API: to search products (by name or barcode), check stock, and decrement/increment stock.
+- Customer API: to search customers (by name or document number) and check their credit status (APPROVED, REJECTED, PENDING).
+Mock both of these for testing using WireMock.
+
+Sale Management:
+- A sale goes through states: ACTIVE, COMPLETED, CANCELLED, FROZEN, RETURNED, PARTIALLY_RETURNED.
+- A sale starts as ACTIVE and belongs to a terminal and a cashier.
+- We can add items to an ACTIVE sale using Product API. Quantity must be validated against available stock. Increment quantity if product already exists. Recalculate totals (subtotal, tax, discount, total) using BigDecimal.
+
+Payments & Checkout:
+- Supports CASH and CREDIT.
+- CASH: Amount received must be >= total. Calculates change.
+- CREDIT: A customer must be associated and have an 'APPROVED' credit status. Reject with 422 if not. Generate a credit reference.
+- Checkout validates stock, decrements it via Product API, and changes state to COMPLETED. Generates a receipt with a transaction ID.
+
+Returns & Cancellations:
+- Cancellations: Only ACTIVE or FROZEN sales. Changes status to CANCELLED. Requires a reason. No stock changes.
+- Freezing: Cashier can pause a sale (FROZEN) to start another, and resume later. Frozen sales expire after 2 hours (cancelled).
+- Returns: Only for COMPLETED sales. 
+  - Full return: All items restored to stock. Status RETURNED.
+  - Partial return: Specific items/quantities restored to stock. Status PARTIALLY_RETURNED. Cannot exceed purchased amount.
+
+Tech Stack:
+- Spring Boot 3.x, Maven/Gradle, Java 17
+- H2 DB, Spring Data JPA
+- Validation: Jakarta Validation
+- Testing: JUnit 5, Mockito, JaCoCo (80%+ line coverage)
+- OpenAPI (Swagger UI)
